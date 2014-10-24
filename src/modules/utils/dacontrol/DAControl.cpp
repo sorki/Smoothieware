@@ -45,8 +45,8 @@ void DAControl::on_gcode_received(void *argument)
     if (gcode->has_m) {
         if (gcode->m == 444) {
             if (gcode->has_letter('C') && gcode->has_letter('S')) {
-                int channel = gcode->get_int('C');
-                int value = gcode->get_int('S');
+                uint8_t channel = gcode->get_int('C');
+                uint16_t value = gcode->get_int('S');
                 this->dac->set_value(channel, value);
                 gcode->stream->printf("DAC channel %d set to %d\n", channel, value);
             }

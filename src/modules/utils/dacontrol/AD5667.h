@@ -3,6 +3,7 @@
 
 #include "libs/Kernel.h"
 #include "libs/MODI2C.h"
+//#include "I2C.h"
 #include "libs/utils.h"
 #include "DACBase.h"
 #include <string>
@@ -12,9 +13,9 @@
 // Datasheet
 // http://www.analog.com/static/imported-files/data_sheets/AD5627R_5647R_5667R_5627_5667.pdf
 
-#define AD5667_ADDRESS_GND          0x0F // address pin low (GND)
-#define AD5667_ADDRESS_VDD          0x0C // address pin high (VCC)
-#define AD5667_ADDRESS_NOCON        0x0E // address pin left open
+#define AD5667_ADDRESS_GND          0x1E // address pin low (GND)
+#define AD5667_ADDRESS_VDD          0x18 // address pin high (VCC)
+#define AD5667_ADDRESS_NOCON        0x1C // address pin left open
 #define AD5667_DEFAULT_ADDRESS      AD5667_ADDRESS_GND
 
 // Command byte
@@ -60,7 +61,10 @@
 class AD5667 : public DACBase {
     public:
         AD5667(uint8_t address = AD5667_DEFAULT_ADDRESS){
-            this->i2c = new MODI2C(p9, p10);
+            //this->i2c = new MODI2C(p28, p27);
+            //this->i2c = new mbed::I2C(p28, p27);
+            this->i2c = new mbed::I2C(p9, p10);
+            //this->i2c = new MODI2C(p9, p10);
             this->i2c_address = address;
 
             this->i2c->frequency(100000); // 100 KHz
@@ -97,12 +101,25 @@ class AD5667 : public DACBase {
 
             data[1] = (uint8_t)(value >> 8);
             data[2] = (uint8_t)(value & 0xFF);
+            //this->i2c->start();
             this->i2c->write(this->i2c_address, data, 3);
+            //this->i2c->write(this->i2c_address, &data[0], 1);
+            /*
+            this->i2c->write(this->i2c_address);
+            this->i2c->write(data[0]);
+            this->i2c->write(data[1]);
+            this->i2c->write(data[2]);
+            */
+            //this->i2c->write(data[2]);
+            //this->i2c->write((uint8_t)(value >> 8));
+            //this->i2c->write((uint8_t)(value & 0xFF));
+            this->i2c->stop();
         }
 
         uint16_t get_value() {
             char data[3];
             this->i2c->read(this->i2c_address, data, 3);
+            this->i2c->stop();
             return (0x0 | data[1] << 8 | data[2]);
         }
 
@@ -117,7 +134,8 @@ class AD5667 : public DACBase {
         }
         */
 
-        MODI2C* i2c;
+        //MODI2C* i2c;
+        mbed::I2C* i2c;
         uint8_t i2c_address;
 };
 

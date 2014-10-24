@@ -6,7 +6,7 @@ DEVICES=lpc1768
 #  Checked - Optimizations enabled with MRI debug monitor support. (Recommended Type)
 #  Release - Optimizations enabled.
 #  Debug - Optimization disabled with MRI debug monitor support.
-BUILD_TYPE=Checked
+BUILD_TYPE=Debug
 
 # Set to 1 to tag each heap allocation with the caller's return address.
 # NOTE: Can't be enabled with latest build as not compatible with newlib nano.
@@ -35,7 +35,7 @@ ifeq "$(ENABLE_DEBUG_MONITOR)" "1"
 # Can add MRI_UART_BAUD=115200 to next line if GDB fails to connect to MRI.
 # Tends to happen on some Linux distros but not Windows and OS X.
 MRI_UART=MRI_UART_0
-MRI_BREAK_ON_INIT=1
+MRI_BREAK_ON_INIT=0
 MRI_SEMIHOST_STDIO=1
 else
 MRI_UART=MRI_UART_0 MRI_UART_SHARE
@@ -68,7 +68,7 @@ export EXCLUDED_MODULES = tools/touchprobe
 
 include $(BUILD_DIR)/build.mk
 
-CONSOLE?=/dev/arduino
+CONSOLE?=/dev/ttyACM0
 BAUD?=1000000
 
 .PHONY: debug-store flash upload debug console dfu

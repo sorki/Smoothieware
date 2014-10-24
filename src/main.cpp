@@ -21,6 +21,7 @@
 #include "modules/utils/simpleshell/SimpleShell.h"
 #include "modules/utils/configurator/Configurator.h"
 #include "modules/utils/currentcontrol/CurrentControl.h"
+#include "modules/utils/dacontrol/DAControl.h"
 #include "modules/utils/player/Player.h"
 #include "modules/utils/pausebutton/PauseButton.h"
 #include "modules/utils/PlayLed/PlayLed.h"
@@ -133,6 +134,7 @@ void init() {
     kernel->add_module( new SimpleShell() );
     kernel->add_module( new Configurator() );
     kernel->add_module( new CurrentControl() );
+    kernel->add_module( new DAControl() );
     kernel->add_module( new PauseButton() );
     kernel->add_module( new PlayLed() );
     kernel->add_module( new Endstops() );
